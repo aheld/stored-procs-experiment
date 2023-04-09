@@ -121,7 +121,7 @@ func ListCtx(next http.Handler) http.Handler {
 
 func BannerCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := context.WithValue(r.Context(), bannerIDKey, "f4bd6cdc-eb4b-4f74-8565-c243d3fdf20x")
+		ctx := context.WithValue(r.Context(), bannerIDKey, "f4bd6cdc-eb4b-4f74-8565-c243d3fdf20a")
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
@@ -129,4 +129,4 @@ func BannerCtx(next http.Handler) http.Handler {
 type contextKey string
 
 const userIDKey contextKey = "userid"
-const bannerIDKey contextKey = "userid"
+const bannerIDKey contextKey = "bannerid"

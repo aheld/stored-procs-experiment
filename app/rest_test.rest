@@ -20,7 +20,7 @@ PUT http://localhost:3333/lists/100/1
 content-type: application/json
 
 {
-    "item": "Thyme & Oregeno"
+    "item": "Thyme & Oregeno & Rosemary"
 }
 
 

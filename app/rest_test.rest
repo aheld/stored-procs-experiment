@@ -1,4 +1,5 @@
-http://localhost:3333/startup
+# Startup will return 200 when the database had the proper schema
+http://localhost:3333/startz
 
 ###
 
@@ -15,7 +16,7 @@ http://localhost:3333/lists/100
 
 ###
 
-PUT http://localhost:3333/lists/100/14000
+PUT http://localhost:3333/lists/100/1
 content-type: application/json
 
 {

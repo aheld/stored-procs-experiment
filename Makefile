@@ -11,7 +11,17 @@ run_migrations:
 	migrate -database $(POSTGRESQL_URL) -path db/migrations up
 
 run_migrations_down:
-	migrate -database $(POSTGRESQL_URL) -path db/migrations down
+	echo "Down one migration"
+	migrate -database $(POSTGRESQL_URL) -path db/migrations down 1
+
+run_go:
+	cd app;\
+	POSTGRESQL_URL=$(POSTGRESQL_URL) go run .
+
+db_test:
+	cd db/cmd;\
+	POSTGRESQL_URL=$(POSTGRESQL_URL) go run .
+
 
 .PHONY = boostrap
 boostrap:

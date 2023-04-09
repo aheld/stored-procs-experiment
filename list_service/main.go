@@ -36,6 +36,15 @@ func main() {
 		w.Write([]byte("Hello"))
 	})
 
+	r.Get("/startup", func(w http.ResponseWriter, r *http.Request) {
+		msg, err := database.CheckVersion()
+		if err != nil {
+			render.Render(w, r, ErrSrvUnavailable(err))
+			return
+		}
+		w.Write([]byte(msg))
+	})
+
 	r.Route("/lists", func(r chi.Router) {
 		r.Post("/", listService.CreateListItem)
 		r.Route("/{userId}", func(r chi.Router) {
@@ -167,6 +176,15 @@ func ErrRender(err error) render.Renderer {
 		Err:            err,
 		HTTPStatusCode: 422,
 		StatusText:     "Error rendering response.",
+		ErrorText:      err.Error(),
+	}
+}
+
+func ErrSrvUnavailable(err error) render.Renderer {
+	return &ErrResponse{
+		Err:            err,
+		HTTPStatusCode: 503,
+		StatusText:     "Server Unavailable, try again later please.",
 		ErrorText:      err.Error(),
 	}
 }

@@ -9,6 +9,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Make sure the DB has the tables and functions we expect
+const SCHEMA_VERSION_REQUIRED = 2
+
 type Database struct {
 	Conn *sql.DB
 }
@@ -64,7 +67,20 @@ func (db Database) GetListItems(userId int) ([]domain.ListItem, error) {
 }
 
 func (db Database) UpdateListItem(userId int, itemId int, item string) error {
-	res, err := db.Conn.Exec("call list_items_update('f4bd6cdc-eb4b-4f74-8565-c243d3fdf20a', $1, $2, $3);", userId, itemId, item)
-	log.Printf("result from proc %v", res)
+	_, err := db.Conn.Exec("call list_items_update('f4bd6cdc-eb4b-4f74-8565-c243d3fdf20a', $1, $2, $3);", userId, itemId, item)
 	return err
+}
+
+func (db Database) CheckVersion() (string, error) {
+	var version int
+	if err := db.Conn.QueryRow("select max(version) from schema_migrations where dirty=false").Scan(&version); err != nil {
+		if err == sql.ErrNoRows {
+			return "", fmt.Errorf("no schema version found")
+		}
+		return "", err
+	}
+	if version >= SCHEMA_VERSION_REQUIRED {
+		return fmt.Sprintf("Schema Version is %d, which is good, because we need version %d", version, SCHEMA_VERSION_REQUIRED), nil
+	}
+	return "", fmt.Errorf("required schema version not found")
 }

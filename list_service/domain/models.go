@@ -10,4 +10,5 @@ type ListRepo interface {
 	InsertListItem(userId int, item string) (int, error)
 	GetListItems(userId int) ([]ListItem, error)
 	UpdateListItem(userId int, itemId int, item string) error
+	CheckVersion() (string, error)
 }

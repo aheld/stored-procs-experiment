@@ -1,0 +1,22 @@
+POST http://localhost:3333/lists HTTP/1.1
+content-type: application/json
+
+{
+    "user_id": 100,
+    "item": "Oregano"
+}
+
+###
+http://localhost:3333/lists/100
+
+###
+
+PUT http://localhost:3333/lists/100/14
+content-type: application/json
+
+{
+    "item": "Thyme & Oregeno"
+}
+
+
+###

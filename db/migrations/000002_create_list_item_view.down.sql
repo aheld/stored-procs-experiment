@@ -1,0 +1,1 @@
+DROP VIEW list_items_view

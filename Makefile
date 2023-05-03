@@ -18,6 +18,10 @@ run_go:
 	cd app;\
 	POSTGRESQL_URL=$(POSTGRESQL_URL) go run .
 
+run_go_reload:
+	cd app;\
+	POSTGRESQL_URL=$(POSTGRESQL_URL) air
+
 db_test:
 	cd db/cmd;\
 	POSTGRESQL_URL=$(POSTGRESQL_URL) go run .
@@ -30,3 +34,9 @@ boostrap:
 	docker pull citusdata/citus:11.2
 	cd list_service; \
 		go mod tidy
+	# Setup live reload for go
+	curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+
+.PHONY: list
+list:
+	@LC_ALL=C $(MAKE) -pRrq -f $(firstword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/(^|\n)# Files(\n|$$)/,/(^|\n)# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
